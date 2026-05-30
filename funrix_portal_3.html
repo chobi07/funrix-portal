@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funrix / BIRCH 業務ポータル</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFEFB;
+    --charcoal: #2C2C2A;
+    --charcoal-light: #5F5E5A;
+    --accent: #B85C5C;
+    --accent-pale: #F5EAE8;
+    --gold: #C4975A;
+    --gold-pale: #FBF4E8;
+    --teal: #3B7A6E;
+    --teal-pale: #E8F3F1;
+    --navy: #2D4A6B;
+    --navy-pale: #E8EEF5;
+    --purple: #6B4C8A;
+    --purple-pale: #F0EBF6;
+    --green: #3D7048;
+    --green-pale: #EAF3EC;
+    --red: #C0392B;
+    --red-pale: #FAEAE8;
+    --border: rgba(44,44,42,0.10);
+    --shadow-sm: 0 2px 8px rgba(44,44,42,0.06);
+    --shadow-md: 0 6px 20px rgba(44,44,42,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--cream);
+    color: var(--charcoal);
+    min-height: 100vh;
+  }
+
+  /* ── ヘッダー ── */
+  .header {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo-main {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--charcoal-light);
+    letter-spacing: 1.5px;
+    margin-left: 10px;
+  }
+  .header-date {
+    font-size: 12px;
+    color: var(--charcoal-light);
+    font-weight: 300;
+  }
+
+  /* ── ヒーロー ── */
+  .hero {
+    background: var(--warm-white);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .hero-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.5px;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub {
+    font-size: 12px;
+    color: var(--charcoal-light);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+  }
+  .kpi-bar {
+    display: flex;
+    justify-content: center;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+  .kpi-item {
+    flex: 1;
+    padding: 0.9rem 0.5rem;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-num {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-label { font-size: 9px; color: var(--charcoal-light); font-weight: 500; letter-spacing: 0.3px; }
+  .kpi-target { font-size: 9px; color: var(--charcoal-light); opacity: 0.55; margin-top: 2px; display: block; }
+
+  /* ── メイン ── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  /* ── セクションヘッダー ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    margin-top: 0.25rem;
+  }
+  .section-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--charcoal-light);
+    white-space: nowrap;
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ── カードグリッド ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 10px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── カード ── */
+  .card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.2rem 0.9rem 1.1rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    opacity: 0;
+    transition: opacity 0.16s;
+    border-radius: 14px 14px 0 0;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .card:hover::after { opacity: 1; }
+
+  /* カテゴリ別 accent line & icon bg */
+  .cat-doc  .card::after, .cat-doc  .card.solo::after { background: var(--navy); }
+  .cat-tenant .card::after { background: var(--teal); }
+  .cat-listing .card::after { background: var(--gold); }
+  .cat-source .card::after { background: var(--green); }
+  .cat-finance .card::after { background: var(--purple); }
+  .cat-input .card::after { background: var(--charcoal-light); }
+
+  .cat-doc    .icon-wrap { background: var(--navy-pale); }
+  .cat-tenant .icon-wrap { background: var(--teal-pale); }
+  .cat-listing .icon-wrap { background: var(--gold-pale); }
+  .cat-source .icon-wrap { background: var(--green-pale); }
+  .cat-finance .icon-wrap { background: var(--purple-pale); }
+  .cat-input  .icon-wrap { background: var(--cream); }
+
+  .icon-wrap {
+    width: 54px;
+    height: 54px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    flex-shrink: 0;
+  }
+  .card-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--charcoal);
+    text-align: center;
+    line-height: 1.45;
+  }
+  .card-desc {
+    font-size: 10px;
+    color: var(--charcoal-light);
+    text-align: center;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* 🔴 自動化バッジ */
+  .badge-auto {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--red-pale);
+    color: var(--red);
+    border: 1px solid rgba(192,57,43,0.18);
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  .badge-auto::before { content: '🔴'; font-size: 7px; }
+
+  /* 一部自動バッジ */
+  .badge-partial {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #FFF8E8;
+    color: #9A6B00;
+    border: 1px solid rgba(154,107,0,0.18);
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    white-space: nowrap;
+  }
+  .badge-partial::before { content: '🟡'; font-size: 7px; }
+
+  /* サブカード（→ 矢印の子項目） */
+  .sub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-top: -14px;
+    margin-bottom: 2.5rem;
+    padding-left: 1rem;
+  }
+  .sub-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.14s, box-shadow 0.14s;
+    cursor: pointer;
+    position: relative;
+  }
+  .sub-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+  .sub-icon { font-size: 18px; flex-shrink: 0; }
+  .sub-name { font-size: 11px; font-weight: 700; color: var(--charcoal); line-height: 1.4; }
+  .sub-desc { font-size: 9.5px; color: var(--charcoal-light); font-weight: 300; margin-top: 1px; }
+
+  /* お知らせ */
+  .notice-box {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 2.5rem;
+    font-size: 12.5px;
+    color: var(--charcoal-light);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* フッター */
+  .footer {
+    text-align: center;
+    padding: 1.75rem;
+    font-size: 10.5px;
+    color: var(--charcoal-light);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    border-top: 1px solid var(--border);
+    opacity: 0.65;
+  }
+
+  /* フェードイン */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero { animation: fadeUp 0.45s ease both; }
+  .card, .sub-card { animation: fadeUp 0.4s ease both; }
+  .card:nth-child(1), .sub-card:nth-child(1) { animation-delay: 0.04s; }
+  .card:nth-child(2), .sub-card:nth-child(2) { animation-delay: 0.08s; }
+  .card:nth-child(3), .sub-card:nth-child(3) { animation-delay: 0.12s; }
+  .card:nth-child(4), .sub-card:nth-child(4) { animation-delay: 0.16s; }
+  .card:nth-child(5) { animation-delay: 0.20s; }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header class="header">
+  <div>
+    <span class="logo-main">Funrix / BIRCH</span>
+    <span class="logo-sub">業務ポータル</span>
+  </div>
+  <div class="header-date" id="today-date"></div>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <p class="hero-eyebrow">Internal Operations Portal</p>
+  <h1 class="hero-title">Funrix <span>/</span> BIRCH</h1>
+  <p class="hero-sub">― 飲食店特化型不動産 業務ポータル ―</p>
+  <div class="kpi-bar">
+    <div class="kpi-item">
+      <span class="kpi-num">—</span>
+      <div class="kpi-label">仕入れ件数</div>
+      <span class="kpi-target">目標 30件/人</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-num">—</span>
+      <div class="kpi-label">内見件数</div>
+      <span class="kpi-target">目標 —</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-num">—</span>
+      <div class="kpi-label">契約件数</div>
+      <span class="kpi-target">目標 2件</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-num">—</span>
+      <div class="kpi-label">月次売上</div>
+      <span class="kpi-target">目標 ¥1M</span>
+    </div>
+  </div>
+</section>
+
+<!-- メイン -->
+<main class="main">
+
+  <!-- お知らせ -->
+  <div class="notice-box">
+    📢　ここにチームへの連絡・注意事項を記載してください
+  </div>
+
+  <!-- ① 書類作成 -->
+  <div class="section-header">
+    <span class="section-label">書類作成</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-doc">
+    <a class="card" href="https://script.google.com/macros/s/AKfycbzbfOgRU0sLYzPm36tpsXx5v-rZ7E2oNVea7mO4zf35Vl16YyjKjWikPrbwl9hZgRxE/exec" target="_blank">
+      <div class="icon-wrap">📝</div>
+      <div class="card-name">重説作成</div>
+      <div class="card-desc">重要事項説明書の作成・チェック</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">📋</div>
+      <div class="card-name">申込（紙申込）</div>
+      <div class="card-desc">紙申込書の受付・スキャン管理</div>
+    </a>
+    <a class="card" href="https://maisoku-227408647001.asia-northeast1.run.app" target="_blank">
+      <div class="icon-wrap">🗺️</div>
+      <div class="card-name">マイソク作成</div>
+      <div class="card-desc">物件概要書・間取り図の作成</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">📊</div>
+      <div class="card-name">条件設定</div>
+      <div class="card-desc">賃料・保証金・諸条件の設定</div>
+    </a>
+  </div>
+
+  <!-- ② テナント対応 -->
+  <div class="section-header">
+    <span class="section-label">テナント対応</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-tenant">
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">🏠</div>
+      <div class="card-name">内見手配</div>
+      <div class="card-desc">内見日程調整・立会い手配</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">💬</div>
+      <div class="card-name">チャット対応</div>
+      <div class="card-desc">問合せ対応（1/3は自動化済み）<br>
+        <span class="badge-partial" style="margin-top:5px;display:inline-flex;">一部自動化</span>
+      </div>
+    </a>
+  </div>
+  <!-- チャット対応の子項目 -->
+  <div class="sub-grid">
+    <a class="sub-card" href="#" target="_blank">
+      <span class="sub-icon">🤖</span>
+      <div>
+        <div class="sub-name">飲食店.com 自動応答</div>
+        <div class="sub-desc">チャット自動返信設定</div>
+        <span class="badge-auto" style="margin-top:4px;display:inline-flex;">自動化対象</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- ③ 物件掲載 -->
+  <div class="section-header">
+    <span class="section-label">物件掲載</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-listing">
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">🍽️</div>
+      <div class="card-name">飲食店.com 掲載</div>
+      <div class="card-desc">飲食店ドットコムへの物件登録・更新</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">📍</div>
+      <div class="card-name">現調まとめ</div>
+      <div class="card-desc">現地調査結果の記録・まとめ</div>
+    </a>
+  </div>
+
+  <!-- ④ 仕入れ -->
+  <div class="section-header">
+    <span class="section-label">仕入れ</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-source">
+    <a class="card" href="https://www.notion.so/c377e1a056204e4f829c9be99ae58845" target="_blank">
+      <div class="icon-wrap">🏢</div>
+      <div class="card-name">物件DB</div>
+      <div class="card-desc">全仕入れ物件の管理・ステータス確認</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">⌨️</div>
+      <div class="card-name">仕入れ物件<br>入力作業</div>
+      <div class="card-desc">新規物件情報の入力・登録</div>
+    </a>
+    <a class="card" href="https://www.notion.so/21dfd597a1474a6eb1a49b68726da7eb" target="_blank">
+      <div class="icon-wrap">👤</div>
+      <div class="card-name">顧客DB</div>
+      <div class="card-desc">見込み顧客〜契約済み顧客管理</div>
+    </a>
+  </div>
+
+  <!-- ⑤ 経理 -->
+  <div class="section-header">
+    <span class="section-label">経理関係</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-finance">
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">🧾</div>
+      <div class="card-name">請求書作成</div>
+      <div class="card-desc">
+        仲介手数料・業務委託費の請求書<br>
+        <span class="badge-auto" style="margin-top:5px;display:inline-flex;">自動化対象</span>
+      </div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">🗒️</div>
+      <div class="card-name">領収書作成</div>
+      <div class="card-desc">
+        領収書の発行・管理<br>
+        <span class="badge-auto" style="margin-top:5px;display:inline-flex;">自動化対象</span>
+      </div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">💴</div>
+      <div class="card-name">初期費用明細<br>作成</div>
+      <div class="card-desc">
+        敷金・礼金・仲介料の明細書<br>
+        <span class="badge-auto" style="margin-top:5px;display:inline-flex;">自動化対象</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- ⑥ 入力関係 -->
+  <div class="section-header">
+    <span class="section-label">入力・管理</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="card-grid cat-input">
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">📥</div>
+      <div class="card-name">物件管理入力</div>
+      <div class="card-desc">
+        物件情報のDB登録・更新<br>
+        <span class="badge-auto" style="margin-top:5px;display:inline-flex;">自動化対象</span>
+      </div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">📑</div>
+      <div class="card-name">申込管理入力</div>
+      <div class="card-desc">申込情報のDB登録・進捗管理</div>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="icon-wrap">⭐</div>
+      <div class="card-name">物件評価<br>シート入力</div>
+      <div class="card-desc">物件スコアリング・評価記録</div>
+    </a>
+  </div>
+
+  <!-- 業務マニュアル・研修・レポート -->
+  <div class="section-header">
+    <span class="section-label">マニュアル・研修・レポート</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="sub-grid" style="margin-top:0; margin-bottom:2.5rem; padding-left:0; grid-template-columns: repeat(auto-fill, minmax(170px,1fr));">
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac35810db5fae21a074c61a9" target="_blank">
+      <span class="sub-icon">🔄</span>
+      <div>
+        <div class="sub-name">業務フロー</div>
+        <div class="sub-desc">仲介5ステップ・サブリースフロー</div>
+      </div>
+    </a>
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac35810db5fae21a074c61a9" target="_blank">
+      <span class="sub-icon">✅</span>
+      <div>
+        <div class="sub-name">重説チェックリスト</div>
+        <div class="sub-desc">宅建業法第35条対応</div>
+      </div>
+    </a>
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac35810db5fae21a074c61a9" target="_blank">
+      <span class="sub-icon">🚨</span>
+      <div>
+        <div class="sub-name">トラブル対応</div>
+        <div class="sub-desc">敷金・解約・損害請求の手順</div>
+      </div>
+    </a>
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac3581a0b126c2a3a0374444" target="_blank">
+      <span class="sub-icon">🎓</span>
+      <div>
+        <div class="sub-name">14日間カリキュラム</div>
+        <div class="sub-desc">AGT研修 Day1〜Day14</div>
+      </div>
+    </a>
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac35815ea792fce11747133a" target="_blank">
+      <span class="sub-icon">📈</span>
+      <div>
+        <div class="sub-name">月次KPIレポート</div>
+        <div class="sub-desc">目標vs実績・月次振り返り</div>
+      </div>
+    </a>
+    <a class="sub-card" href="https://www.notion.so/3706dff8ac3581178ff2e9c38ca4f085" target="_blank">
+      <span class="sub-icon">🔗</span>
+      <div>
+        <div class="sub-name">ツール・リンク集</div>
+        <div class="sub-desc">Temposmart・athome 他</div>
+      </div>
+    </a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Funrix / BIRCH 業務ポータル　|　管理者: 健登　|　2026
+</footer>
+
+<script>
+  const d = new Date();
+  const days = ['日','月','火','水','木','金','土'];
+  document.getElementById('today-date').textContent =
+    d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日（' + days[d.getDay()] + '）';
+</script>
+</body>
+</html>
